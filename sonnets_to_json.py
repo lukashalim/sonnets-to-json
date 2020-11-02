@@ -17,9 +17,11 @@ pattern = re.compile('Last Updated: .*', re.MULTILINE)
 m = pattern.search(ebook)
 ebook_dict['last updated'] = m.group()
 
-#https://stackoverflow.com/questions/267399/how-do-you-match-only-valid-roman-numerals-with-a-regular-expression
-#roman_numeral_pattern = '^^  (CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$$'
-sonnet_pattern = r"\n\n  ([IVXLCDM]{1,8})\n\n((?: {2,4}.*\n{1,1})+(?: {2,4}.*(?=\n{2,3})))"
+#[IVXLCDM]{1,8} does not perfectly identify roman numerals, but works for this purpose
+#After the roman numeral, there are two line breaks before the sonnet text
+#The lines of the sonnet have single line breaks, followed by multiple line breaks at the end
+#this is captured by the pattern ((?: {2,4}.*\n)+(?: {2,4}.*(?=\n{2,3})))
+sonnet_pattern = r"\n\n  ([IVXLCDM]{1,8})\n\n((?: {2,4}.*\n)+(?: {2,4}.*(?=\n{2,3})))"
 pattern = re.compile(sonnet_pattern, re.MULTILINE)
 sonnets = pattern.findall(ebook)
 
